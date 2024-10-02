@@ -1,4 +1,5 @@
 local creationLaser = false
+local rotationAngle = 0.0
 
 function ToggleCreationLaser(modelName, callback)
     creationLaser = not creationLaser
@@ -31,12 +32,13 @@ function ToggleCreationLaser(modelName, callback)
                     else
                         SetEntityCoordsNoOffset(previewObject, coords.x, coords.y, coords.z + zOffset, true, true, true)
                     end
+                    SetEntityRotation(previewObject, 0.0, 0.0, rotationAngle, 2, true)
                 elseif DoesEntityExist(previewObject) then
                     DeleteObject(previewObject)
                     previewObject = nil
                 end
 
-                if hit and IsControlJustReleased(0, 38) then
+                if IsControlJustReleased(0, 38) then -- E key
                     creationLaser = false
                     if DoesEntityExist(previewObject) then
                         DeleteObject(previewObject)
@@ -44,6 +46,13 @@ function ToggleCreationLaser(modelName, callback)
                     end
                     callback(coords)
                 end
+
+                if IsControlJustPressed(0, 241) then -- Mouse wheel up
+                    rotationAngle = rotationAngle + 5.0
+                elseif IsControlJustPressed(0, 242) then -- Mouse wheel down
+                    rotationAngle = rotationAngle - 5.0
+                end
+
                 Wait(0)
             end
             if DoesEntityExist(previewObject) then
